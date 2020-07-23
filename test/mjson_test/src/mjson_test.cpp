@@ -3,16 +3,37 @@
 
 #include "catch.hpp"
 
-#include <iostream>
-#include <string>
+#include <mjson/mjson.hpp>
+using namespace mjson;
 
-unsigned int Factorial( unsigned int number ) {
-    return number <= 1 ? number : Factorial(number-1)*number;
+TEST_CASE("Empty string", "[json]") {
+    json js("");
+    REQUIRE_FALSE(js.is_valid());
 }
 
-TEST_CASE( "Factorials are computed", "[factorial]" ) {
-    REQUIRE( Factorial(1) == 1 );
-    REQUIRE( Factorial(2) == 2 );
-    REQUIRE( Factorial(3) == 6 );
-    REQUIRE( Factorial(10) == 3628800 );
+TEST_CASE("Not a valid json string", "[json]") {
+    const auto in = R"(*)";
+
+    json js(in);
+    REQUIRE_FALSE(js.is_valid());
 }
+
+TEST_CASE("Not a valid json body", "[json]") {
+    const auto in = R"(
+        {
+    )";
+
+    json js(in);
+    REQUIRE_FALSE(js.is_valid());
+}
+
+TEST_CASE("A valid json body", "[json]") {
+    const auto in = R"(
+        {
+        }
+    )";
+
+    json js(in);
+    REQUIRE(js.is_valid());
+}
+
