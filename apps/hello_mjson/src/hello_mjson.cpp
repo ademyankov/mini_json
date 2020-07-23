@@ -1,3 +1,4 @@
+#include "mjson/mjson.hpp"
 
 int main() {
 
@@ -34,7 +35,7 @@ int main() {
 
     using namespace std;
 
-    tiny::json js(j2);
+    mjson::json js(j2);
 
     if (!js.is_valid()) {
         cout << "FAILURE: Format error!" << endl;
@@ -42,7 +43,7 @@ int main() {
     }
 
     if (js.has_object("object")) {
-        tiny::json& obj = js.get_object("object");
+        mjson::json& obj = js.get_object("object");
         cout << "key1   : " << obj["key1"] << endl;
         cout << "key2   : " << obj["key2"] << endl;
         cout << "key3   : " << obj["key3"] << endl;

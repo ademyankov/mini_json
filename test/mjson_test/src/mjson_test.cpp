@@ -1,4 +1,6 @@
 #define CATCH_CONFIG_MAIN
+#define _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING
+
 #include "catch.hpp"
 
 #include <iostream>
@@ -14,7 +16,3 @@ TEST_CASE( "Factorials are computed", "[factorial]" ) {
     REQUIRE( Factorial(3) == 6 );
     REQUIRE( Factorial(10) == 3628800 );
 }
-
-
-
-

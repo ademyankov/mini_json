@@ -126,7 +126,7 @@ private:
         return dic;
     }();
 
-    static constexpr Actions actions_ = []() {
+    const Actions actions_ = []() {
         Actions h{};
 
         h[0x10] = &json::onKVPairDone;
