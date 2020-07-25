@@ -495,3 +495,121 @@ TEST_CASE("Valid sequence of key/value pairs", "[sequence]") {
         REQUIRE(js["format"] == "zip-3.14.betta");
     }
 }
+
+TEST_CASE("Invalid array body", "[array]") {
+    SECTION("Close bracket is expected") {
+        const auto in = R"(
+            {
+                "array" : [
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 0);
+    }
+}
+
+TEST_CASE("Invalid array items", "[array]") {
+    SECTION("A valid value is expected") {
+        const auto in = R"(
+            {
+                "array" : [ : ]
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 0);
+    }
+
+    SECTION("A valid value is expected") {
+        const auto in = R"(
+            {
+                "array" : [,]
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 0);
+    }
+
+    SECTION("Array illigal sequence of items") {
+        const auto in = R"(
+            {
+                "array" : [ "item1", ]
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 0);
+    }
+}
+
+TEST_CASE("Valid array", "[array]") {
+    SECTION("Empty array") {
+        const auto in = R"(
+            {
+                "array" : []
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js.get_array("array").size() == 0);
+    }
+
+    SECTION("Array w/ 1 item of empty string") {
+        const auto in = R"(
+            {
+                "array" : [ "" ]
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js.get_array("array").size() == 1);
+        REQUIRE(js.get_array("array").at(0) == "");
+    }
+
+    SECTION("Array w/ 6 items of empty strings") {
+        const auto in = R"(
+            {
+                "array" : [ "", "", "", "", "", "" ]
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js.get_array("array").size() == 6);
+        for (size_t i = 0; i < js.get_array("array").size(); i++)
+            REQUIRE(js.get_array("array").at(i) == "");
+    }
+
+    SECTION("Array w/ 4 items of strings; free formated") {
+        const auto in = R"(
+            {
+                "array" : [
+                    "i1",
+                    "i2",
+                    "i3",
+                    "i4"
+                ]
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js.get_array("array").size() == 4);
+        REQUIRE(js.get_array("array").at(0) == "i1");
+        REQUIRE(js.get_array("array").at(1) == "i2");
+        REQUIRE(js.get_array("array").at(2) == "i3");
+        REQUIRE(js.get_array("array").at(3) == "i4");
+    }
+}
