@@ -6,8 +6,14 @@
 namespace mjson {
 
 //
-// Mini Json parser
-// Supported values: strings, array of strings
+// Mini Json parser.
+//
+// Supported values:
+//    - "string"
+//    - [array of "strings"] (no nested array supported)
+//    - {object}
+//    - true/false/null (stored as strings)
+//
 // Lang: C++17
 //
 class json {
@@ -73,53 +79,6 @@ private:
     KeyArrayMap kam_{};
     KeyValueMap kvm_{};
 
-    bool onKeyChar() {
-        k_ += s_.at(pos_);
-        return true;
-    }
-
-    bool onValueChar() {
-        v_ += s_.at(pos_);
-        return true;
-    }
-
-
-
-    bool onObjectBegin() {
-        json obj(s_.data() + pos_);
-        if (obj.is_valid()) {
-            kom_.insert(KeyObjectMap::value_type(k_, std::move(obj)));
-        }
-        return true;
-    }
-
-    bool onArrayItem() {
-        array_.push_back(v_);
-        v_.clear();
-        return true;
-    }
-
-    bool onArrayDone() {
-        is_array_ = false;
-        kam_.insert(KeyArrayMap::value_type(k_, array_));
-        array_.clear();
-        k_.clear();
-    }
-
-    bool onKVPairDone() {
-        if (is_array_) {
-            onArrayItem();
-            state_ = 3;
-            return true;
-        }
-
-        kvm_.insert(KeyValueMap::value_type(k_, v_));
-        k_.clear();
-        v_.clear();
-
-        return true;
-    }
-
     static constexpr Dictionary dictionary_ = []() {
         Dictionary dic{};
 
@@ -155,6 +114,16 @@ private:
     /*8*/ {   -1,    8,    8,    8,    8, 0x15,   -1,   -1,   -1,   -1,   -1, 0x26 }, // 8 - Array;
 
     };
+
+    bool onKeyChar() {
+        k_ += s_.at(pos_);
+        return true;
+    }
+
+    bool onValueChar() {
+        v_ += s_.at(pos_);
+        return true;
+    }
 
     bool onArrayBegin() {
         is_array_ = true;

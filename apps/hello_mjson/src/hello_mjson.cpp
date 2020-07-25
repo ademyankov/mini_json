@@ -23,12 +23,19 @@ int main() {
 #else
     const auto j2 = R"(
         {
+            "server.auth.chain" : [ "cer1.der", "cer2.der", "cer3.der" ],
+
             "object" : {
-                "key1" : value1,
-                "key2" : value2,
-                "key3" : value3,
-                "array1" : [ "val1", "val2", "val3", "val4" ]
-            }
+                "key1" : "value1",
+                "key2" : "value2",
+                "key3" : "value3",
+                "array1" : [ "i1", "i2", "i3", "i4" ]
+            },
+
+            "namespace"     : ns,
+            "company"       : companyc,
+            "personality"   : Controller,
+            "class"         : seacert
         }
     )";
 #endif

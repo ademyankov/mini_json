@@ -613,3 +613,53 @@ TEST_CASE("Valid array", "[array]") {
         REQUIRE(js.get_array("array").at(3) == "i4");
     }
 }
+
+TEST_CASE("Invalid object body", "[object]") {
+    SECTION("Close bracket is expected") {
+        const auto in = R"(
+            {
+                "object" : {
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 0);
+    }
+}
+
+TEST_CASE("Valid object", "[object]") {
+    SECTION("Empty object") {
+        const auto in = R"(
+            {
+                "object" : {}
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js.get_object("object").size() == 0);
+    }
+}
+
+/*
+{
+    "a": ["a1", ["sub_a1", "sub_a2"], "a3"]
+}
+
+    get_array("a").at(0) == "a1"
+    get_array("a").at(1) == "__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87"
+    get_array("a").at(2) == "a3"
+
+    get_array("__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87")
+
+    map[a]:
+        vector[0] = "a1"
+        vector[1] = "__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87"
+        vector[2] = "a3"
+
+    map[__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87]:
+        vector[0] = "sub_a1"
+        vector[1] = "sub_a2"
+*/
