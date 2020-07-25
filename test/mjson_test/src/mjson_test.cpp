@@ -239,3 +239,259 @@ TEST_CASE("Not a valid value separator", "[value]") {
     }
 }
 
+TEST_CASE("Invalid value string", "[value]") {
+    SECTION("Opening quote is expected") {
+        const auto in = R"(
+            {
+                "name" : value"
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+    }
+
+    SECTION("Closing quote is expected") {
+        const auto in = R"(
+            {
+                "name" : "value
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+    }
+
+    SECTION("Invalid quote symbols") {
+        const auto in = R"(
+            {
+                "name" : 'value'
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+    }
+
+    SECTION("Double colon symbols") {
+        const auto in = R"(
+            {
+                "name" : :"value"
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+    }
+
+    SECTION("Illigal LF in the string") {
+        const auto in = R"(
+            {
+                "name" : "va
+lue"
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+    }
+
+    SECTION("Illigal vertical tab in the name") {
+        const auto in = R"(
+            {
+                "name" : "value 	 string"
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+    }
+}
+
+TEST_CASE("Valid value string", "[value]") {
+    SECTION("value1") {
+        const auto in = R"(
+            {
+                "name" : "value"
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["name"] == "value");
+    }
+
+    SECTION("value2") {
+        const auto in = R"(
+            {
+                "Key Name" : "Value String"
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["Key Name"] == "Value String");
+    }
+
+    SECTION("value3") {
+        const auto in = R"(
+            {
+                "Name" : ""
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["Name"] == "");
+    }
+
+    SECTION("value4") {
+        const auto in = R"(
+            {
+                "LongName-TheJsonKey" : "Some long value string w/ spaces"
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["LongName-TheJsonKey"] == "Some long value string w/ spaces");
+    }
+
+    SECTION("value5") {
+        const auto in = R"(
+            {
+                "Name123" : "String w/ symbols: 1234 $%#($@)&$! []"
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["Name123"] == "String w/ symbols: 1234 $%#($@)&$! []");
+    }
+
+    SECTION("Empty value string") {
+        const auto in = R"(
+            {
+                "" : ""
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js[""] == "");
+    }
+}
+
+TEST_CASE("Illigal sequence", "[sequence]") {
+    SECTION("Comma and the end") {
+        const auto in = R"(
+            {
+                "name" : "value",
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["name"] == "value");
+    }
+
+    SECTION("Quote is expected") {
+        const auto in = R"(
+            {
+                "name" : "value",
+                [
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["name"] == "value");
+    }
+
+    SECTION("Double comma") {
+        const auto in = R"(
+            {
+                "name" : "value",,
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["name"] == "value");
+    }
+
+    SECTION("Illigal quote symbol") {
+        const auto in = R"(
+            {
+                "name" : "value",
+                'key1' : 'value2'
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["name"] == "value");
+    }
+}
+
+TEST_CASE("Duplicate key", "[sequence]") {
+    SECTION("Illigal key") {
+        const auto in = R"(
+            {
+                "name" : "string1",
+                "name" : "Some string2"
+            }
+        )";
+
+        json js(in);
+        REQUIRE_FALSE(js.is_valid());
+        REQUIRE(js.size() == 1);
+        REQUIRE(js["name"] == "string1");
+    }
+}
+
+TEST_CASE("Valid sequence of key/value pairs", "[sequence]") {
+    SECTION("Two valid items") {
+        const auto in = R"(
+            {
+                "name1" : "value",
+                "name2" : "value"
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 2);
+        REQUIRE(js["name1"] == "value");
+        REQUIRE(js["name2"] == "value");
+    }
+
+    SECTION("Sequence of  valid items") {
+        const auto in = R"(
+            {
+                "file name" : "image",
+                "separator" : ".",
+                "extension" : "png",
+                "format" : "zip-3.14.betta"
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 4);
+        REQUIRE(js["file name"] == "image");
+        REQUIRE(js["separator"] == ".");
+        REQUIRE(js["extension"] == "png");
+        REQUIRE(js["format"] == "zip-3.14.betta");
+    }
+}

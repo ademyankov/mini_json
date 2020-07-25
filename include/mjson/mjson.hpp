@@ -171,18 +171,20 @@ private:
 
 
     //        code (dictionary)
+    //       default
     //         0     1     2     3     4     5     6     7     8     9     a     b
     //         *    ' '   \t    \n    \r     "     :     ,     {     }     [     ]     state (transition)
   /*X*/ //{   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1 }, // X - 
 
-    static constexpr char transition_[7][12] = {
+    static constexpr char transition_[8][12] = {
     /*0*/ {   -1,    0,    0,    0,    0,   -1,   -1,   -1,    1,   -1,   -1,   -1 }, // 0 - Json header
-    /*1*/ {   -1,    1,    1,    1,    1, 0x12,   -1,   -1,   -1,   -2,   -1,   -1 }, // 1 - Main loop: 12 - key start
+    /*1*/ {   -1,    1,    1,    1,    1, 0x12,   -1,   -1,   -1,   -2,   -1,   -1 }, // 1 - Key; 12 - key start
     /*2*/ { 0x22, 0x22,   -1,   -1,   -1, 0x13, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 }, // 2 - Key; 22 - consume 13 - end
     /*3*/ {   -1,    3,    3,    3,    3,   -1,    4,   -1,   -1,   -1,   -1,   -1 }, // 3 - ':' separator expected
     /*4*/ {   -1,    4,    4,    4,    4, 0x15,   -1,   -1,   -1,   -1,   -1,   -1 }, // 4 - Value; 15 - start
     /*5*/ { 0x25, 0x25,   -1,   -1,   -1, 0x16, 0x25, 0x25, 0x25, 0x25, 0x25, 0x25 }, // 5 - Value; 25 - consume 16 - end
-    /*6*/ {   -1,    6,    6,    6,    6,   -1,   -1,    1,   -1,   -2,   -1,   -1 }, // 6 - Is there next pair?
+    /*6*/ {   -1,    6,    6,    6,    6,   -1,   -1,    7,   -1,   -2,   -1,   -1 }, // 6 - ',' sequence or done
+    /*7*/ {   -1,    7,    7,    7,    7, 0x12,   -1,   -1,   -1,   -1,   -1,   -1 }, // 7 - The next key should start
 
 
     };
