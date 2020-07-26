@@ -13,7 +13,7 @@ namespace mjson {
 //    - [array of "strings"] (no nested arrays supported)
 //    - {object}
 //
-// Lang: C++17
+// Lang: C++17 (can be easily converted to C++14 by refactoring static inline initialization)
 //
 class json {
 public:
