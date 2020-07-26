@@ -1,4 +1,14 @@
-﻿#define CATCH_CONFIG_MAIN
+﻿//
+// Unit Tests for Mini Json parser
+//
+// Copyright(c) 2020 Alex Demyankov <alex.demyankov@gmail.com>
+// All rights reserved.
+//
+// Licensed under the MIT license; A copy of the license that can be
+// found in the LICENSE file.
+//
+
+#define CATCH_CONFIG_MAIN
 #define _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING
 
 #include "catch.hpp"
@@ -688,24 +698,3 @@ TEST_CASE("Valid object", "[object]") {
         REQUIRE(obj["objkey2"] == "objvalue2");
     }
 }
-
-/*
-{
-    "a": ["a1", ["sub_a1", "sub_a2"], "a3"]
-}
-
-    get_array("a").at(0) == "a1"
-    get_array("a").at(1) == "__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87"
-    get_array("a").at(2) == "a3"
-
-    get_array("__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87")
-
-    map[a]:
-        vector[0] = "a1"
-        vector[1] = "__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87"
-        vector[2] = "a3"
-
-    map[__ref.73F60704-F98B-4F1F-BC47-983CC39FEE87]:
-        vector[0] = "sub_a1"
-        vector[1] = "sub_a2"
-*/

@@ -1,3 +1,27 @@
+//
+// Minimalistic Json parser
+//
+// Copyright(c) 2020 Alex Demyankov <alex.demyankov@gmail.com>
+// All rights reserved.
+//
+// Licensed under the MIT license; A copy of the license that can be
+// found in the LICENSE file.
+//
+
+//
+// Supported values:
+//    - "string"
+//    - [array of "strings"] (no nested arrays)
+//    - {object}
+//
+// Lang: C++17 (can be easily converted to C++14 by refactoring static inline initialization)
+//
+// Mini Json parser finite state machine is based on Matthew Endsley's idea for HTTP parser.
+//
+// The original article can be found at:
+// http://mendsley.github.io/2012/12/19/tinyhttp.html
+//
+
 #include <iostream>
 #include <vector>
 #include <array>
@@ -5,16 +29,6 @@
 
 namespace mjson {
 
-//
-// Mini Json parser under 200 lines of code!
-//
-// Supported values:
-//    - "string"
-//    - [array of "strings"] (no nested arrays supported)
-//    - {object}
-//
-// Lang: C++17 (can be easily converted to C++14 by refactoring static inline initialization)
-//
 class json {
 public:
     json(const std::string& s) : s_(s), pos_(0), state_(0) {
@@ -88,24 +102,9 @@ private:
         kvm_.clear();
     }
 
-    static constexpr Dictionary dictionary_ = []() {
-        Dictionary dic{};
-
-        dic[' '] = 1;
-        dic['\t'] = 2;
-        dic['\n'] = 3;
-        dic['\r'] = 4;
-        dic['"'] = 5;
-        dic[':'] = 6;
-        dic[','] = 7;
-        dic['{'] = 8;
-        dic['}'] = 9;
-        dic['['] = 10;
-        dic[']'] = 11;
-
-        return dic;
-    }();
-
+    //
+    // Transition matrix.
+    //
     //        code (dictionary)
     //       default (if none of the dictionary chars has been found)
     //         0     1     2     3     4     5     6     7     8     9     a     b
@@ -167,6 +166,24 @@ private:
         k_.clear();
         v_.clear();
     }
+
+    static constexpr Dictionary dictionary_ = []() {
+        Dictionary dic{};
+
+        dic[' '] = 1;
+        dic['\t'] = 2;
+        dic['\n'] = 3;
+        dic['\r'] = 4;
+        dic['"'] = 5;
+        dic[':'] = 6;
+        dic[','] = 7;
+        dic['{'] = 8;
+        dic['}'] = 9;
+        dic['['] = 10;
+        dic[']'] = 11;
+
+        return dic;
+    }();
 
     const Actions actions_ = []() {
         Actions h{};

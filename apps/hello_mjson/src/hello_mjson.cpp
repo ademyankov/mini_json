@@ -1,4 +1,14 @@
-#include "mjson/mjson.hpp"
+//
+// Sample application for Mini Json parser
+//
+// Copyright(c) 2020 Alex Demyankov <alex.demyankov@gmail.com>
+// All rights reserved.
+//
+// Licensed under the MIT license; A copy of the license that can be
+// found in the LICENSE file.
+//
+
+#include <mjson/mjson.hpp>
 
 int main() {
     const auto config = R"(
