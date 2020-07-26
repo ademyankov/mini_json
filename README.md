@@ -47,9 +47,9 @@ void foo() {
 ```
 
 ## Files:
-- The header is [here](\include\mjson\mjson.hpp)
-- The hello sample application is [here](\apps\hello_mjson\src\hello_mjson.cpp)
-- Catch2 unit tests are [here](\test\mjson_test\src\mjson_test.cpp)
+- The header is [here](/include/mjson/mjson.hpp)
+- The hello sample application is [here](/apps/hello_mjson/src/hello_mjson.cpp)
+- Catch2 unit tests are [here](/test/mjson_test/src/mjson_test.cpp)
 
 ## Build
 The code has been built and tested on Windows and Linux using MS Visual Studio
@@ -64,7 +64,7 @@ cd build/msvs
 cmake ../..
 cmake --build .
 ```
-Microsoft Visual Studio solution file will be [at](\build\msvs\mjson.sln)
+Microsoft Visual Studio solution file will be */build/msvs/mjson.sln*
 
 ### Linux
 To build on Linux using make:
