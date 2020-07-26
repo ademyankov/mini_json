@@ -144,6 +144,7 @@ TEST_CASE("Valid key name", "[key]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("name"));
         REQUIRE(js["name"] == "");
     }
 
@@ -157,6 +158,7 @@ TEST_CASE("Valid key name", "[key]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("Key Name"));
         REQUIRE(js["Key Name"] == "");
     }
 
@@ -170,6 +172,7 @@ TEST_CASE("Valid key name", "[key]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("Name"));
         REQUIRE(js["Name"] == "");
     }
 
@@ -183,6 +186,7 @@ TEST_CASE("Valid key name", "[key]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("LongName-TheJsonKey"));
         REQUIRE(js["LongName-TheJsonKey"] == "");
     }
 
@@ -196,6 +200,7 @@ TEST_CASE("Valid key name", "[key]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("Name123"));
         REQUIRE(js["Name123"] == "");
     }
 
@@ -209,6 +214,7 @@ TEST_CASE("Valid key name", "[key]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has(""));
         REQUIRE(js[""] == "");
     }
 }
@@ -319,6 +325,7 @@ TEST_CASE("Valid value string", "[value]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("name"));
         REQUIRE(js["name"] == "value");
     }
 
@@ -332,6 +339,7 @@ TEST_CASE("Valid value string", "[value]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("Key Name"));
         REQUIRE(js["Key Name"] == "Value String");
     }
 
@@ -345,6 +353,7 @@ TEST_CASE("Valid value string", "[value]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("Name"));
         REQUIRE(js["Name"] == "");
     }
 
@@ -358,6 +367,7 @@ TEST_CASE("Valid value string", "[value]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("LongName-TheJsonKey"));
         REQUIRE(js["LongName-TheJsonKey"] == "Some long value string w/ spaces");
     }
 
@@ -371,6 +381,7 @@ TEST_CASE("Valid value string", "[value]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has("Name123"));
         REQUIRE(js["Name123"] == "String w/ symbols: 1234 $%#($@)&$! []");
     }
 
@@ -384,6 +395,7 @@ TEST_CASE("Valid value string", "[value]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has(""));
         REQUIRE(js[""] == "");
     }
 }
@@ -398,8 +410,7 @@ TEST_CASE("Illigal sequence", "[sequence]") {
 
         json js(in);
         REQUIRE_FALSE(js.is_valid());
-        REQUIRE(js.size() == 1);
-        REQUIRE(js["name"] == "value");
+        REQUIRE(js.size() == 0);
     }
 
     SECTION("Quote is expected") {
@@ -412,8 +423,7 @@ TEST_CASE("Illigal sequence", "[sequence]") {
 
         json js(in);
         REQUIRE_FALSE(js.is_valid());
-        REQUIRE(js.size() == 1);
-        REQUIRE(js["name"] == "value");
+        REQUIRE(js.size() == 0);
     }
 
     SECTION("Double comma") {
@@ -425,8 +435,7 @@ TEST_CASE("Illigal sequence", "[sequence]") {
 
         json js(in);
         REQUIRE_FALSE(js.is_valid());
-        REQUIRE(js.size() == 1);
-        REQUIRE(js["name"] == "value");
+        REQUIRE(js.size() == 0);
     }
 
     SECTION("Illigal quote symbol") {
@@ -439,8 +448,7 @@ TEST_CASE("Illigal sequence", "[sequence]") {
 
         json js(in);
         REQUIRE_FALSE(js.is_valid());
-        REQUIRE(js.size() == 1);
-        REQUIRE(js["name"] == "value");
+        REQUIRE(js.size() == 0);
     }
 }
 
@@ -455,8 +463,7 @@ TEST_CASE("Duplicate key", "[sequence]") {
 
         json js(in);
         REQUIRE_FALSE(js.is_valid());
-        REQUIRE(js.size() == 1);
-        REQUIRE(js["name"] == "string1");
+        REQUIRE(js.size() == 0);
     }
 }
 
@@ -472,6 +479,8 @@ TEST_CASE("Valid sequence of key/value pairs", "[sequence]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 2);
+        REQUIRE(js.has("name1"));
+        REQUIRE(js.has("name2"));
         REQUIRE(js["name1"] == "value");
         REQUIRE(js["name2"] == "value");
     }
@@ -489,6 +498,10 @@ TEST_CASE("Valid sequence of key/value pairs", "[sequence]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 4);
+        REQUIRE(js.has("file name"));
+        REQUIRE(js.has("separator"));
+        REQUIRE(js.has("extension"));
+        REQUIRE(js.has("format"));
         REQUIRE(js["file name"] == "image");
         REQUIRE(js["separator"] == ".");
         REQUIRE(js["extension"] == "png");
@@ -559,6 +572,7 @@ TEST_CASE("Valid array", "[array]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has_array("array"));
         REQUIRE(js.get_array("array").size() == 0);
     }
 
@@ -572,6 +586,7 @@ TEST_CASE("Valid array", "[array]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has_array("array"));
         REQUIRE(js.get_array("array").size() == 1);
         REQUIRE(js.get_array("array").at(0) == "");
     }
@@ -586,6 +601,7 @@ TEST_CASE("Valid array", "[array]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has_array("array"));
         REQUIRE(js.get_array("array").size() == 6);
         for (size_t i = 0; i < js.get_array("array").size(); i++)
             REQUIRE(js.get_array("array").at(i) == "");
@@ -606,6 +622,7 @@ TEST_CASE("Valid array", "[array]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has_array("array"));
         REQUIRE(js.get_array("array").size() == 4);
         REQUIRE(js.get_array("array").at(0) == "i1");
         REQUIRE(js.get_array("array").at(1) == "i2");
@@ -639,7 +656,36 @@ TEST_CASE("Valid object", "[object]") {
         json js(in);
         REQUIRE(js.is_valid());
         REQUIRE(js.size() == 1);
+        REQUIRE(js.has_object("object"));
         REQUIRE(js.get_object("object").size() == 0);
+    }
+
+    SECTION("Object w/ some fields") {
+        const auto in = R"(
+            {
+                "key1": "value1",
+                "object" : {
+                    "objkey1": "objvalue1",
+                    "objkey2": "objvalue2"
+                },
+                "key2": "value2"
+            }
+        )";
+
+        json js(in);
+        REQUIRE(js.is_valid());
+        REQUIRE(js.size() == 3);
+        REQUIRE(js.has("key1"));
+        REQUIRE(js.has("key2"));
+        REQUIRE(js["key1"] == "value1");
+        REQUIRE(js["key2"] == "value2");
+        REQUIRE(js.has_object("object"));
+        json& obj = js.get_object("object");
+        REQUIRE(obj.size() == 2);
+        REQUIRE(obj.has("objkey1"));
+        REQUIRE(obj.has("objkey2"));
+        REQUIRE(obj["objkey1"] == "objvalue1");
+        REQUIRE(obj["objkey2"] == "objvalue2");
     }
 }
 
