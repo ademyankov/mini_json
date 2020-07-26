@@ -42,9 +42,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
-#/libsps/test/c4/verifier/out*
-#/libsps/test/c4/verifier/CMakeFiles*
-
 #==============================================================================#
 # Explicit files to ignore (only matches one).
 #==============================================================================#
