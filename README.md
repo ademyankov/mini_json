@@ -74,3 +74,20 @@ cd build/x86_x64_linux
 cmake ../..
 make
 ```
+
+## Include mjson into your cmake project
+The below cmake code creats *mjson* interface library and downloads _mjson.hpp_ file only.
+```py
+ExternalProject_Add(mjson_download
+    PREFIX              ${FETCHCONTENT_BASE_DIR}/mjson
+    URL                 https://github.com/ademyankov/mini_json/releases/download/v1.1/mjson.hpp
+    DOWNLOAD_NO_EXTRACT 1
+    CONFIGURE_COMMAND   ""
+    BUILD_COMMAND       ""
+    INSTALL_COMMAND     ""
+)
+
+add_library(mjson INTERFACE)
+target_include_directories(mjson INTERFACE ${FETCHCONTENT_BASE_DIR}/mjson/src)
+add_dependencies(mjson mjson_download)
+```
